@@ -9,28 +9,25 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-stages:
-- stage: Build
-  jobs:
-  - job: PythonTest
-  
-  steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.6'
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+  displayName: 'Use Python $(python.version)'
 
-    - script: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-    displayName: 'Install dependencies'
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
 
-    - script: |
-      pip install pytest pytest-azurepipelines
-      pytest
-    displayName: 'pytest'
+- script: |
+    pip install pytest pytest-azurepipelines
+    pytest
+  displayName: 'pytest'
+  condition: 
 
-    - task: PythonScript@0
-    inputs:
-      scriptSource: 'inline'
-      script: |
-        print('python script - Test')
+- task: PythonScript@0
+  inputs:
+    scriptSource: inline
+    script: |
+      print('test python task -> script')
